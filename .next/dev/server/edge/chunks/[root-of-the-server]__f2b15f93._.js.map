@@ -1,0 +1,6 @@
+{
+  "version": 3,
+  "sources": [],
+  "sections": [
+    {"offset": {"line": 16, "column": 0}, "map": {"version":3,"sources":["turbopack:///[project]/middleware.ts"],"sourcesContent":["// middleware.ts\n\nimport { NextRequest, NextResponse } from 'next/server'\nimport { cookies } from 'next/headers'\n\nconst privateRoutes = ['/profile']\n\nexport async function middleware(request: NextRequest) {\n  const cookieStore = await cookies()\n  const accessToken = cookieStore.get('accessToken')?.value\n  const refreshToken = cookieStore.get('refreshToken')?.value\n  \n\t// Шлях, на який користувач намагається перейти\n  const { pathname } = request.nextUrl\n  \n  const isPrivateRoute = privateRoutes.some((route) => pathname.startsWith(route))\n\n}\n\nexport const config = {};\n"],"names":[],"mappings":"AAAA,gBAAgB;;;;;;;AAGhB;AAAA;;AAEA,MAAM,gBAAgB;IAAC;CAAW;AAE3B,eAAe,WAAW,OAAoB;IACnD,MAAM,cAAc,MAAM,IAAA,sLAAO;IACjC,MAAM,cAAc,YAAY,GAAG,CAAC,gBAAgB;IACpD,MAAM,eAAe,YAAY,GAAG,CAAC,iBAAiB;IAEvD,+CAA+C;IAC9C,MAAM,EAAE,QAAQ,EAAE,GAAG,QAAQ,OAAO;IAEpC,MAAM,iBAAiB,cAAc,IAAI,CAAC,CAAC,QAAU,SAAS,UAAU,CAAC;AAE3E;AAEO,MAAM,SAAS,CAAC"}}]
+}

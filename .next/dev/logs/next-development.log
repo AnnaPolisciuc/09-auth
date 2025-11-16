@@ -1,0 +1,9 @@
+[00:00:00.628] Server  WARN     ⚠ The "middleware" file convention is deprecated. Please use "proxy" instead. Learn more: https://nextjs.org/docs/messages/middleware-to-proxy
+[00:00:00.703] Server  LOG      ✓ Ready in 527ms
+[00:00:15.160] Server  LOG     > Error Response Data:
+[00:00:15.160] Server  DIR     {} {}
+[00:00:15.656] Browser ERROR   React instrumentation encountered an error: %o {}
+[00:01:00.294] Server  LOG     > Error Response Data:
+[00:01:00.294] Server  DIR     {} {}
+[00:01:00.452] Server  LOG     > Error Response Data:
+[00:01:00.452] Server  DIR     {} {}

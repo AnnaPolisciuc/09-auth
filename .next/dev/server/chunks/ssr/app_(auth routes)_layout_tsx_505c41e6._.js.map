@@ -1,0 +1,6 @@
+{
+  "version": 3,
+  "sources": [],
+  "sections": [
+    {"offset": {"line": 4, "column": 0}, "map": {"version":3,"sources":["file:///Users/annapolisciuc/Desktop/Projects/09-auth/app/%28auth%20routes%29/layout.tsx"],"sourcesContent":["'use client';\n\nimport { useEffect, useState } from 'react';\nimport { useRouter } from 'next/navigation';\n\ntype Props = {\n  children: React.ReactNode;\n};\n\nexport default function PublicLayout({ children }: Props) {\n  const [loading, setLoading] = useState(true);\n  const router = useRouter();\n\n  useEffect(() => {\n    setTimeout(() => {\n      router.refresh(); \n      setLoading(false); \n    }, 0);\n  }, [router]);\n\n  return <>{loading ? <div>Loading...</div> : children}</>;\n}\n"],"names":[],"mappings":";;;;;AAEA;AACA;AAHA;;;;AASe,SAAS,aAAa,EAAE,QAAQ,EAAS;IACtD,MAAM,CAAC,SAAS,WAAW,GAAG,IAAA,iNAAQ,EAAC;IACvC,MAAM,SAAS,IAAA,+IAAS;IAExB,IAAA,kNAAS,EAAC;QACR,WAAW;YACT,OAAO,OAAO;YACd,WAAW;QACb,GAAG;IACL,GAAG;QAAC;KAAO;IAEX,qBAAO;kBAAG,wBAAU,8OAAC;sBAAI;;;;;mBAAmB;;AAC9C","debugId":null}}]
+}
