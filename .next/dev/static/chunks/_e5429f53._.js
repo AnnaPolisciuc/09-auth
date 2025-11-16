@@ -94,7 +94,11 @@ __turbopack_context__.s([
     "register",
     ()=>register,
     "updateMe",
-    ()=>updateMe
+    ()=>updateMe,
+    "updateMeWithAvatar",
+    ()=>updateMeWithAvatar,
+    "uploadImage",
+    ()=>uploadImage
 ]);
 // import { api } from "@/app/api/api";
 var __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$api$2f$api$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/lib/api/api.ts [app-client] (ecmascript)");
@@ -152,6 +156,33 @@ async function updateMe(payload) {
     const { data } = await __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$api$2f$api$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["nextServer"].patch("/users/me", payload);
     return data;
 }
+const updateMeWithAvatar = async (formData)=>{
+    const { data } = await __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$api$2f$api$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["nextServer"].patch('/users/me', formData, {
+        headers: {
+            'Content-Type': 'multipart/form-data'
+        },
+        withCredentials: true
+    });
+    return data;
+};
+const uploadImage = async (file)=>{
+    try {
+        const formData = new FormData();
+        formData.append('file', file);
+        const { data } = await __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$api$2f$api$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["nextServer"].post('/upload', formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            }
+        });
+        if (!data?.url) {
+            throw new Error('Upload failed: no URL returned');
+        }
+        return data.url;
+    } catch (err) {
+        console.error('Upload error:', err);
+        throw err;
+    }
+};
 if (typeof globalThis.$RefreshHelpers$ === 'object' && globalThis.$RefreshHelpers !== null) {
     __turbopack_context__.k.registerExports(__turbopack_context__.m, globalThis.$RefreshHelpers$);
 }

@@ -30,7 +30,7 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$api$2f$clientApi$2e$t
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$image$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/image.js [app-client] (ecmascript)");
 ;
 var _s = __turbopack_context__.k.signature();
-"use client";
+'use client';
 ;
 ;
 ;
@@ -47,34 +47,79 @@ function EditProfile() {
         "EditProfile.useAuthStore[setUser]": (state)=>state.setUser
     }["EditProfile.useAuthStore[setUser]"]);
     const [username, setUsername] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(user?.username || "");
+    const [imageFile, setImageFile] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(null);
+    const [preview, setPreview] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(user?.avatar || null);
     const [loading, setLoading] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(false);
-    const [error, setError] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(false);
-    const handleSave = async (e)=>{
-        e.preventDefault();
-        setLoading(true);
-        setError(false);
-        try {
-            const updateUser = await (0, __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$api$2f$clientApi$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["updateMe"])({
-                username
-            });
-            setUser(updateUser);
-            router.push("/profile");
-        } catch (err) {
-            setError(true);
-        } finally{
-            setLoading(false);
-        }
-    };
-    const handleCancel = ()=>{
-        router.push("/profile");
-    };
+    const [error, setError] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(null);
     if (!user) return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
         children: "Loading..."
     }, void 0, false, {
         fileName: "[project]/app/(private routes)/profile/edit/page.tsx",
-        lineNumber: 40,
+        lineNumber: 22,
         columnNumber: 21
     }, this);
+    const MAX_SIZE = 2 * 1024 * 1024; // 2MB
+    const handleImageChange = (e)=>{
+        const file = e.target.files?.[0];
+        if (!file) return;
+        if (!file.type.startsWith("image/")) {
+            setError("Only images are allowed");
+            return;
+        }
+        if (file.size > MAX_SIZE) {
+            setError("Max file size 2MB");
+            return;
+        }
+        setError(null);
+        setImageFile(file);
+        setPreview(URL.createObjectURL(file));
+    };
+    const handleRemoveImage = ()=>{
+        setImageFile(null);
+        setPreview(null);
+    };
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useEffect"])({
+        "EditProfile.useEffect": ()=>{
+            return ({
+                "EditProfile.useEffect": ()=>{
+                    if (preview) URL.revokeObjectURL(preview);
+                }
+            })["EditProfile.useEffect"];
+        }
+    }["EditProfile.useEffect"], [
+        preview
+    ]);
+    const handleSave = async (e)=>{
+        e.preventDefault();
+        setLoading(true);
+        setError(null);
+        try {
+            let uploadedUrl;
+            if (imageFile) {
+                uploadedUrl = await (0, __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$api$2f$clientApi$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["uploadImage"])(imageFile);
+            }
+            const updatedUser = await (0, __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$api$2f$clientApi$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["updateMe"])({
+                username,
+                avatar: uploadedUrl ?? preview ?? undefined
+            });
+            setUser(updatedUser);
+            router.push("/profile");
+        } catch (err) {
+            const error = err;
+            console.error(error);
+            if (error.response?.status === 413) {
+                setError("File is too large for the server");
+            } else if (error.response?.status === 404) {
+                setError("Upload endpoint not found");
+            } else {
+                setError("Failed to save user");
+            }
+        } finally{
+            setLoading(false);
+        }
+    };
+    const handleCancel = ()=>router.push("/profile");
     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("main", {
         className: __TURBOPACK__imported__module__$5b$project$5d2f$app$2f28$private__routes$292f$profile$2f$edit$2f$EditProfilePage$2e$module$2e$css__$5b$app$2d$client$5d$__$28$css__module$29$__["default"].mainContent,
         children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -85,19 +130,71 @@ function EditProfile() {
                     children: "Edit Profile"
                 }, void 0, false, {
                     fileName: "[project]/app/(private routes)/profile/edit/page.tsx",
-                    lineNumber: 45,
-                    columnNumber: 7
+                    lineNumber: 97,
+                    columnNumber: 9
                 }, this),
-                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$image$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
-                    src: user.avatar,
-                    alt: "User Avatar",
-                    width: 120,
-                    height: 120,
-                    className: __TURBOPACK__imported__module__$5b$project$5d2f$app$2f28$private__routes$292f$profile$2f$edit$2f$EditProfilePage$2e$module$2e$css__$5b$app$2d$client$5d$__$28$css__module$29$__["default"].avatar
-                }, void 0, false, {
+                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                    className: __TURBOPACK__imported__module__$5b$project$5d2f$app$2f28$private__routes$292f$profile$2f$edit$2f$EditProfilePage$2e$module$2e$css__$5b$app$2d$client$5d$__$28$css__module$29$__["default"].avatarWrapper,
+                    children: [
+                        preview ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$image$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
+                            src: preview,
+                            alt: "User Avatar",
+                            width: 120,
+                            height: 120,
+                            className: __TURBOPACK__imported__module__$5b$project$5d2f$app$2f28$private__routes$292f$profile$2f$edit$2f$EditProfilePage$2e$module$2e$css__$5b$app$2d$client$5d$__$28$css__module$29$__["default"].avatar
+                        }, void 0, false, {
+                            fileName: "[project]/app/(private routes)/profile/edit/page.tsx",
+                            lineNumber: 101,
+                            columnNumber: 13
+                        }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                            className: __TURBOPACK__imported__module__$5b$project$5d2f$app$2f28$private__routes$292f$profile$2f$edit$2f$EditProfilePage$2e$module$2e$css__$5b$app$2d$client$5d$__$28$css__module$29$__["default"].avatarPlaceholder,
+                            children: "No Avatar"
+                        }, void 0, false, {
+                            fileName: "[project]/app/(private routes)/profile/edit/page.tsx",
+                            lineNumber: 109,
+                            columnNumber: 13
+                        }, this),
+                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("label", {
+                            className: __TURBOPACK__imported__module__$5b$project$5d2f$app$2f28$private__routes$292f$profile$2f$edit$2f$EditProfilePage$2e$module$2e$css__$5b$app$2d$client$5d$__$28$css__module$29$__["default"].uploadLabel,
+                            children: [
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                    children: preview ? "Change photo" : "Upload photo"
+                                }, void 0, false, {
+                                    fileName: "[project]/app/(private routes)/profile/edit/page.tsx",
+                                    lineNumber: 113,
+                                    columnNumber: 13
+                                }, this),
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
+                                    type: "file",
+                                    accept: "image/*",
+                                    onChange: handleImageChange,
+                                    className: __TURBOPACK__imported__module__$5b$project$5d2f$app$2f28$private__routes$292f$profile$2f$edit$2f$EditProfilePage$2e$module$2e$css__$5b$app$2d$client$5d$__$28$css__module$29$__["default"].uploadInput
+                                }, void 0, false, {
+                                    fileName: "[project]/app/(private routes)/profile/edit/page.tsx",
+                                    lineNumber: 114,
+                                    columnNumber: 13
+                                }, this)
+                            ]
+                        }, void 0, true, {
+                            fileName: "[project]/app/(private routes)/profile/edit/page.tsx",
+                            lineNumber: 112,
+                            columnNumber: 11
+                        }, this),
+                        preview && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                            type: "button",
+                            className: __TURBOPACK__imported__module__$5b$project$5d2f$app$2f28$private__routes$292f$profile$2f$edit$2f$EditProfilePage$2e$module$2e$css__$5b$app$2d$client$5d$__$28$css__module$29$__["default"].removeButton,
+                            onClick: handleRemoveImage,
+                            children: "Remove"
+                        }, void 0, false, {
+                            fileName: "[project]/app/(private routes)/profile/edit/page.tsx",
+                            lineNumber: 123,
+                            columnNumber: 13
+                        }, this)
+                    ]
+                }, void 0, true, {
                     fileName: "[project]/app/(private routes)/profile/edit/page.tsx",
-                    lineNumber: 47,
-                    columnNumber: 7
+                    lineNumber: 99,
+                    columnNumber: 9
                 }, this),
                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("form", {
                     className: __TURBOPACK__imported__module__$5b$project$5d2f$app$2f28$private__routes$292f$profile$2f$edit$2f$EditProfilePage$2e$module$2e$css__$5b$app$2d$client$5d$__$28$css__module$29$__["default"].profileInfo,
@@ -111,8 +208,8 @@ function EditProfile() {
                                     children: "Username:"
                                 }, void 0, false, {
                                     fileName: "[project]/app/(private routes)/profile/edit/page.tsx",
-                                    lineNumber: 57,
-                                    columnNumber: 11
+                                    lineNumber: 131,
+                                    columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
                                     id: "username",
@@ -123,14 +220,14 @@ function EditProfile() {
                                     required: true
                                 }, void 0, false, {
                                     fileName: "[project]/app/(private routes)/profile/edit/page.tsx",
-                                    lineNumber: 58,
-                                    columnNumber: 11
+                                    lineNumber: 132,
+                                    columnNumber: 13
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/app/(private routes)/profile/edit/page.tsx",
-                            lineNumber: 56,
-                            columnNumber: 9
+                            lineNumber: 130,
+                            columnNumber: 11
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
                             children: [
@@ -139,16 +236,16 @@ function EditProfile() {
                             ]
                         }, void 0, true, {
                             fileName: "[project]/app/(private routes)/profile/edit/page.tsx",
-                            lineNumber: 67,
-                            columnNumber: 9
+                            lineNumber: 142,
+                            columnNumber: 11
                         }, this),
                         error && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
                             className: __TURBOPACK__imported__module__$5b$project$5d2f$app$2f28$private__routes$292f$profile$2f$edit$2f$EditProfilePage$2e$module$2e$css__$5b$app$2d$client$5d$__$28$css__module$29$__["default"].error,
-                            children: "Failed to update username."
+                            children: error
                         }, void 0, false, {
                             fileName: "[project]/app/(private routes)/profile/edit/page.tsx",
-                            lineNumber: 68,
-                            columnNumber: 19
+                            lineNumber: 144,
+                            columnNumber: 21
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                             className: __TURBOPACK__imported__module__$5b$project$5d2f$app$2f28$private__routes$292f$profile$2f$edit$2f$EditProfilePage$2e$module$2e$css__$5b$app$2d$client$5d$__$28$css__module$29$__["default"].actions,
@@ -157,11 +254,11 @@ function EditProfile() {
                                     type: "submit",
                                     className: __TURBOPACK__imported__module__$5b$project$5d2f$app$2f28$private__routes$292f$profile$2f$edit$2f$EditProfilePage$2e$module$2e$css__$5b$app$2d$client$5d$__$28$css__module$29$__["default"].saveButton,
                                     disabled: loading,
-                                    children: "Save"
+                                    children: loading ? "Saving..." : "Save"
                                 }, void 0, false, {
                                     fileName: "[project]/app/(private routes)/profile/edit/page.tsx",
-                                    lineNumber: 71,
-                                    columnNumber: 11
+                                    lineNumber: 147,
+                                    columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
                                     type: "button",
@@ -170,34 +267,34 @@ function EditProfile() {
                                     children: "Cancel"
                                 }, void 0, false, {
                                     fileName: "[project]/app/(private routes)/profile/edit/page.tsx",
-                                    lineNumber: 74,
-                                    columnNumber: 11
+                                    lineNumber: 151,
+                                    columnNumber: 13
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/app/(private routes)/profile/edit/page.tsx",
-                            lineNumber: 70,
-                            columnNumber: 9
+                            lineNumber: 146,
+                            columnNumber: 11
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/app/(private routes)/profile/edit/page.tsx",
-                    lineNumber: 55,
-                    columnNumber: 7
+                    lineNumber: 129,
+                    columnNumber: 9
                 }, this)
             ]
         }, void 0, true, {
             fileName: "[project]/app/(private routes)/profile/edit/page.tsx",
-            lineNumber: 44,
-            columnNumber: 5
+            lineNumber: 96,
+            columnNumber: 7
         }, this)
     }, void 0, false, {
         fileName: "[project]/app/(private routes)/profile/edit/page.tsx",
-        lineNumber: 43,
+        lineNumber: 95,
         columnNumber: 5
     }, this);
 }
-_s(EditProfile, "8OqtQHDVYBk78/m+y3LaSj8zT/U=", false, function() {
+_s(EditProfile, "W3kgwdsezR5xdCdL63YpS/PCGes=", false, function() {
     return [
         __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$navigation$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useRouter"],
         __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$store$2f$authStore$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useAuthStore"],
