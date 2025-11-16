@@ -36,7 +36,7 @@ export const getMe = async (): Promise<User> => {
 };
 
 
-export const fetchNotes = async (params: NotesQuery = {}): Promise<Note[]> => {
+export const fetchNotes = async (p0: number, p1: number, p2: string, tag: string | undefined, params: NotesQuery = {}): Promise<Note[]> => {
   const headers = await cookieHeaders();
   const { data } = await nextServer.get<Note[]>('/notes', { headers, params });
   return data;

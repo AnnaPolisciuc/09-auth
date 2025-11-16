@@ -4,10 +4,6 @@ import type { Note, NoteCreate } from "../../types/note";
 // import { api } from "@/app/api/api";
 import { nextServer } from "./api";
 
-export type UpdateUserRequest = {
-  username?: string;
-  photoUrl?: string | null;
-};
 
 export type CreateNoteInput = Pick<Note, 'title' | 'content' | 'tag'>;
 
@@ -64,31 +60,11 @@ export async function updateMe(payload: Partial<User>) {
   return data;
 }
 
-export const updateMeWithAvatar = async (formData: FormData) => {
-  const { data } = await nextServer.patch<User>('/users/me', formData, {
-    headers: {
-      'Content-Type': 'multipart/form-data',
-    },
-    withCredentials: true,
-  });
-  return data;
-};
-
 export const uploadImage = async (file: File): Promise<string> => {
-  try {
-    const formData = new FormData();
-    formData.append('file', file);
-    const { data } = await nextServer.post('/upload', formData, {
-      headers: { 'Content-Type': 'multipart/form-data' },
-    });
+  const formData = new FormData();
+  formData.append('file', file);
 
-    if (!data?.url) {
-      throw new Error('Upload failed: no URL returned');
-    }
-
-    return data.url;
-  } catch (err) {
-    console.error('Upload error:', err);
-    throw err;
-  }
+  const { data } = await nextServer.post('/upload', formData);
+  return data.url;
 };
+

@@ -1,20 +1,46 @@
 'use client';
 
-import { ReactNode, createContext, useContext, useState } from 'react';
+import { ReactNode, createContext, useContext, useEffect, useState } from 'react';
+import { useAuthStore } from '@/lib/store/authStore';
+import { checkSession, getMe } from '@/lib/api/clientApi';
+import { User } from '@/types/user';
 
 type AuthContextType = {
-  user: string | null;
-  login: (username: string) => void;
+  user: User | null;
+  login: (user: User) => void;
   logout: () => void;
 };
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
-  const [user, setUser] = useState<string | null>(null);
+  const { user, setUser, clearIsAuthenticated } = useAuthStore();
+  const [loading, setLoading] = useState(true);
 
-  const login = (username: string) => setUser(username);
-  const logout = () => setUser(null);
+  useEffect(() => {
+    const initAuth = async () => {
+      try {
+        const sessionValid = await checkSession();
+        if (sessionValid) {
+          const currentUser = await getMe();
+          setUser(currentUser);
+        } else {
+          clearIsAuthenticated();
+        }
+      } catch {
+        clearIsAuthenticated();
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    initAuth();
+  }, [setUser, clearIsAuthenticated]);
+
+  const login = (userData: User) => setUser(userData);
+  const logout = () => clearIsAuthenticated();
+
+  if (loading) return null;
 
   return (
     <AuthContext.Provider value={{ user, login, logout }}>

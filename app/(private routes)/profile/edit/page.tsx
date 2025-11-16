@@ -6,7 +6,6 @@ import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import { updateMe, uploadImage } from "@/lib/api/clientApi";
 import Image from "next/image";
-import { AxiosError } from "axios";
 
 export default function EditProfile() {
   const router = useRouter();
@@ -14,14 +13,13 @@ export default function EditProfile() {
   const setUser = useAuthStore((state) => state.setUser);
 
   const [username, setUsername] = useState(user?.username || "");
+  const [photoUrl, setPhotoUrl] = useState<string | null>(user?.avatar || null);
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [preview, setPreview] = useState<string | null>(user?.avatar || null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   if (!user) return <p>Loading...</p>;
-
-  const MAX_SIZE = 2 * 1024 * 1024; // 2MB
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -32,10 +30,11 @@ export default function EditProfile() {
       return;
     }
 
+    const MAX_SIZE = 2 * 1024 * 1024;
     if (file.size > MAX_SIZE) {
-      setError("Max file size 2MB");
-      return;
-    }
+  setError("Max file size 2MB");
+  return;
+}
 
     setError(null);
     setImageFile(file);
@@ -45,6 +44,7 @@ export default function EditProfile() {
   const handleRemoveImage = () => {
     setImageFile(null);
     setPreview(null);
+    setPhotoUrl(null);
   };
 
   // eslint-disable-next-line react-hooks/rules-of-hooks
@@ -60,30 +60,22 @@ export default function EditProfile() {
     setError(null);
 
     try {
-      let uploadedUrl: string | undefined;
+      let newPhotoUrl: string | null = photoUrl;
 
       if (imageFile) {
-        uploadedUrl = await uploadImage(imageFile);
+        newPhotoUrl = await uploadImage(imageFile);
       }
 
       const updatedUser = await updateMe({
         username,
-        avatar: uploadedUrl ?? preview ?? undefined,
+        avatar: newPhotoUrl ?? undefined,
       });
 
       setUser(updatedUser);
       router.push("/profile");
-    } catch (err: unknown) {
-      const error = err as AxiosError;
-      console.error(error);
-    
-      if (error.response?.status === 413) {
-        setError("File is too large for the server");
-      } else if (error.response?.status === 404) {
-        setError("Upload endpoint not found");
-      } else {
-        setError("Failed to save user");
-      }
+    } catch (err) {
+      console.error(err);
+      setError("Failed to save user");
     } finally {
       setLoading(false);
     }

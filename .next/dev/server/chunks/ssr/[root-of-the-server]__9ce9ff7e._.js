@@ -80,117 +80,58 @@ const nextServer = __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$
     withCredentials: true
 });
 }),
-"[project]/lib/api/clientApi.ts [app-rsc] (ecmascript)", ((__turbopack_context__) => {
+"[project]/lib/api/serverApi.ts [app-rsc] (ecmascript)", ((__turbopack_context__) => {
 "use strict";
 
 __turbopack_context__.s([
     "checkSession",
     ()=>checkSession,
-    "createNote",
-    ()=>createNote,
-    "deleteNote",
-    ()=>deleteNote,
     "fetchNoteById",
     ()=>fetchNoteById,
     "fetchNotes",
     ()=>fetchNotes,
     "getMe",
-    ()=>getMe,
-    "login",
-    ()=>login,
-    "logout",
-    ()=>logout,
-    "register",
-    ()=>register,
-    "updateMe",
-    ()=>updateMe,
-    "updateMeWithAvatar",
-    ()=>updateMeWithAvatar,
-    "uploadImage",
-    ()=>uploadImage
+    ()=>getMe
 ]);
-// import { api } from "@/app/api/api";
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$headers$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/headers.js [app-rsc] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$api$2f$api$2e$ts__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/lib/api/api.ts [app-rsc] (ecmascript)");
 ;
-async function register(email, password) {
-    const { data } = await __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$api$2f$api$2e$ts__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["nextServer"].post("/auth/register", {
-        email,
-        password
+;
+const cookieHeaders = async ()=>{
+    const cookieStore = await (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$headers$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["cookies"])();
+    const cookieString = Array.from(cookieStore.getAll()).map((c)=>`${c.name}=${c.value}`).join("; ");
+    return {
+        Cookie: cookieString
+    };
+};
+const checkSession = async ()=>{
+    const headers = await cookieHeaders();
+    const res = await __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$api$2f$api$2e$ts__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["nextServer"].get('/auth/session', {
+        headers
     });
-    return data;
-}
-const login = async (email, password)=>{
-    const { data } = await __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$api$2f$api$2e$ts__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["nextServer"].post("/auth/login", {
-        email,
-        password
+    return res;
+};
+const getMe = async ()=>{
+    const headers = await cookieHeaders();
+    const { data } = await __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$api$2f$api$2e$ts__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["nextServer"].get('/users/me', {
+        headers
     });
     return data;
 };
-async function logout() {
-    await __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$api$2f$api$2e$ts__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["nextServer"].post("/auth/logout");
-}
-async function checkSession() {
-    const { data } = await __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$api$2f$api$2e$ts__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["nextServer"].get("/auth/session");
-    return data || null;
-}
-async function fetchNotes(page = 1, perPage = 12, search = "", tag) {
-    const params = {
-        page,
-        perPage
-    };
-    if (search.trim()) params.search = search.trim();
-    if (tag) params.tag = tag;
-    const { data } = await __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$api$2f$api$2e$ts__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["nextServer"].get("/notes", {
+const fetchNotes = async (p0, p1, p2, tag, params = {})=>{
+    const headers = await cookieHeaders();
+    const { data } = await __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$api$2f$api$2e$ts__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["nextServer"].get('/notes', {
+        headers,
         params
     });
     return data;
-}
-async function fetchNoteById(id) {
-    const { data } = await __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$api$2f$api$2e$ts__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["nextServer"].get(`/notes/${id}`);
-    return data;
-}
-async function createNote(note) {
-    const { data } = await __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$api$2f$api$2e$ts__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["nextServer"].post("/notes", note);
-    return data;
-}
-async function deleteNote(id) {
-    const { data } = await __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$api$2f$api$2e$ts__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["nextServer"].delete(`/notes/${id}`);
-    return data;
-}
-async function getMe() {
-    const { data } = await __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$api$2f$api$2e$ts__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["nextServer"].get("/users/me");
-    return data;
-}
-async function updateMe(payload) {
-    const { data } = await __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$api$2f$api$2e$ts__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["nextServer"].patch("/users/me", payload);
-    return data;
-}
-const updateMeWithAvatar = async (formData)=>{
-    const { data } = await __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$api$2f$api$2e$ts__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["nextServer"].patch('/users/me', formData, {
-        headers: {
-            'Content-Type': 'multipart/form-data'
-        },
-        withCredentials: true
+};
+const fetchNoteById = async (id)=>{
+    const headers = await cookieHeaders();
+    const { data } = await __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$api$2f$api$2e$ts__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["nextServer"].get(`/notes/${id}`, {
+        headers
     });
     return data;
-};
-const uploadImage = async (file)=>{
-    try {
-        const formData = new FormData();
-        formData.append('file', file);
-        const { data } = await __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$api$2f$api$2e$ts__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["nextServer"].post('/upload', formData, {
-            headers: {
-                'Content-Type': 'multipart/form-data'
-            }
-        });
-        if (!data?.url) {
-            throw new Error('Upload failed: no URL returned');
-        }
-        return data.url;
-    } catch (err) {
-        console.error('Upload error:', err);
-        throw err;
-    }
 };
 }),
 "[project]/app/(private routes)/notes/filter/[...slug]/Notes.client.tsx [app-rsc] (client reference proxy) <module evaluation>", ((__turbopack_context__) => {
@@ -242,7 +183,7 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$tanstack$2f$react$2d$query$2f$build$2f$modern$2f$HydrationBoundary$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/@tanstack/react-query/build/modern/HydrationBoundary.js [app-rsc] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$tanstack$2f$query$2d$core$2f$build$2f$modern$2f$hydration$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/@tanstack/query-core/build/modern/hydration.js [app-rsc] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$tanstack$2f$query$2d$core$2f$build$2f$modern$2f$queryClient$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/@tanstack/query-core/build/modern/queryClient.js [app-rsc] (ecmascript)");
-var __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$api$2f$clientApi$2e$ts__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/lib/api/clientApi.ts [app-rsc] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$api$2f$serverApi$2e$ts__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/lib/api/serverApi.ts [app-rsc] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$app$2f28$private__routes$292f$notes$2f$filter$2f5b2e2e2e$slug$5d2f$Notes$2e$client$2e$tsx__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/app/(private routes)/notes/filter/[...slug]/Notes.client.tsx [app-rsc] (ecmascript)");
 ;
 ;
@@ -284,7 +225,7 @@ async function NotesByTagPage({ params }) {
             "",
             tag
         ],
-        queryFn: ()=>(0, __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$api$2f$clientApi$2e$ts__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["fetchNotes"])(1, 12, "", tag)
+        queryFn: ()=>(0, __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$api$2f$serverApi$2e$ts__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["fetchNotes"])(1, 12, "", tag)
     });
     const dehydratedState = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$tanstack$2f$query$2d$core$2f$build$2f$modern$2f$hydration$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["dehydrate"])(queryClient);
     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$tanstack$2f$react$2d$query$2f$build$2f$modern$2f$HydrationBoundary$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["HydrationBoundary"], {
@@ -305,4 +246,4 @@ async function NotesByTagPage({ params }) {
 }),
 ];
 
-//# sourceMappingURL=%5Broot-of-the-server%5D__5dcaf996._.js.map
+//# sourceMappingURL=%5Broot-of-the-server%5D__9ce9ff7e._.js.map

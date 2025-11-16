@@ -10,6 +10,7 @@ export default function AuthNavigation() {
   const router = useRouter();
 
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
+  const user = useAuthStore((state) => state.user);
   const clearIsAuthenticated = useAuthStore((state) => state.clearIsAuthenticated);
 
   const handleLogout = async () => {
@@ -24,8 +25,11 @@ export default function AuthNavigation() {
 
   return (
     <ul className={css.navList}>
-      {isAuthenticated ? (
+      {isAuthenticated && user ? (
         <>
+          <li className={css.navigationItem}>
+            <span className={css.userEmail}>{user.email}</span>
+          </li>
           <li className={css.navigationItem}>
             <Link href="/profile" className={css.navigationLink}>Profile</Link>
           </li>

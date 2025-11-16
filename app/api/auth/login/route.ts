@@ -2,8 +2,6 @@ import { NextRequest, NextResponse } from 'next/server';
 import { api } from '../../api';
 import { cookies } from 'next/headers';
 import { parse } from 'cookie';
-import { isAxiosError } from 'axios';
-import { logErrorResponse } from '../../_utils/utils';
 
 export async function POST(req: NextRequest) {
   try {
@@ -31,17 +29,16 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   } catch (error: unknown) {
-    if (isAxiosError(error)) {
-      logErrorResponse(error.response?.data);
+    if (error instanceof Error) {
       return NextResponse.json(
-        { error: error.message, response: error.response?.data },
-        { status: error.response?.status ?? 500 }
+        { error: error.message },
+        { status: 500 }
       );
-    } else if (error instanceof Error) {
-      logErrorResponse({ message: error.message });
-    } else {
-      logErrorResponse({ message: 'Unknown error' });
     }
-    return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
+  
+    return NextResponse.json(
+      { error: 'Internal Server Error' },
+      { status: 500 }
+    );
   }
 }
