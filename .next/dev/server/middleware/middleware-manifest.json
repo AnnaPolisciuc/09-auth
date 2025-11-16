@@ -3,28 +3,24 @@
   "middleware": {
     "/": {
       "files": [
-        "server/edge/chunks/_8357c1d9._.js",
-        "server/edge/chunks/[root-of-the-server]__52b06eb8._.js",
-        "server/edge/chunks/turbopack-edge-wrapper_9463dbce.js"
+        "server/edge/chunks/_e36d360d._.js",
+        "server/edge/chunks/[root-of-the-server]__f2b15f93._.js",
+        "server/edge/chunks/turbopack-edge-wrapper_501d1f63.js"
       ],
       "name": "middleware",
       "page": "/",
       "matchers": [
         {
-          "regexp": "/:nextData(_next/data/[^/]{1,})?/profile/:path*{(\\\\.json)}?",
-          "originalSource": "/profile/:path*"
-        },
-        {
           "regexp": "/:nextData(_next/data/[^/]{1,})?/notes/:path*{(\\\\.json)}?",
           "originalSource": "/notes/:path*"
         },
         {
-          "regexp": "/:nextData(_next/data/[^/]{1,})?/sign-in{(\\\\.json)}?",
-          "originalSource": "/sign-in"
+          "regexp": "/:nextData(_next/data/[^/]{1,})?/profile/:path*{(\\\\.json)}?",
+          "originalSource": "/profile/:path*"
         },
         {
-          "regexp": "/:nextData(_next/data/[^/]{1,})?/sign-up{(\\\\.json)}?",
-          "originalSource": "/sign-up"
+          "regexp": "/:nextData(_next/data/[^/]{1,})?/api/:path*{(\\\\.json)}?",
+          "originalSource": "/api/:path*"
         }
       ],
       "wasm": [],
@@ -32,9 +28,9 @@
       "env": {
         "__NEXT_BUILD_ID": "development",
         "NEXT_SERVER_ACTIONS_ENCRYPTION_KEY": "BmclIZCi5Y+7vsBzPK4IxMaKGl67DidDbTCkhpfl8mI=",
-        "__NEXT_PREVIEW_MODE_ID": "ab8870018046a1131b051b251bea6687",
-        "__NEXT_PREVIEW_MODE_ENCRYPTION_KEY": "7e244dd504cb18eaa914bc09e26dbcfb0ae8d13ee99baa4b46db764027e3be59",
-        "__NEXT_PREVIEW_MODE_SIGNING_KEY": "e8d82592d7289baffe486d22845a53a7a8888555e4bbd2af841dd673e3876c2e"
+        "__NEXT_PREVIEW_MODE_ID": "b5910e76dc8f16ec60e19cd5368bbd70",
+        "__NEXT_PREVIEW_MODE_ENCRYPTION_KEY": "83da68fbd23d5cd69b89c3d46716d2a03527deaacaa4d98cd291269a402120e9",
+        "__NEXT_PREVIEW_MODE_SIGNING_KEY": "1e9b3b87a842834b95d772429fe055a1155fda8fa6d37174f1b19ed1d1895b13"
       }
     }
   },

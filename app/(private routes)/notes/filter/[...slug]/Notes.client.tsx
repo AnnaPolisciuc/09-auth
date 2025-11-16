@@ -10,6 +10,8 @@ import ErrorComponent from "./error";
 import Link from "next/link";
 import SearchBox from "@/components/SearchBox/SearchBox";
 import { fetchNotes } from "@/lib/api/clientApi";
+import { useAuthStore } from "@/lib/store/authStore";
+
 
 interface NotesClientProps {
   tag?: string;
@@ -20,6 +22,8 @@ export default function NotesClient({ tag }: NotesClientProps) {
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [debounced, setDebounced] = useState<string>("");
 
+  
+
   useEffect(() => {
     const t = setTimeout(() => {
       setDebounced(searchQuery);
@@ -29,11 +33,13 @@ export default function NotesClient({ tag }: NotesClientProps) {
   }, [searchQuery]);
 
   const queryKey = useMemo(() => ["notes", page, debounced, tag], [page, debounced, tag]);
+  const isAuthenticated = useAuthStore(state => state.isAuthenticated);
 
   const { data, isLoading, error, isFetching } = useQuery<NoteResponse, Error>({
     queryKey,
     queryFn: () => fetchNotes(page, 12, debounced, tag),
     staleTime: 1000 * 5,
+    enabled: isAuthenticated,
   });
 
   const handleSearchChange = (value: string) => {

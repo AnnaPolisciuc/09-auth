@@ -1,9 +1,11 @@
 
 import type { User } from "../../types/user";
-import type { NoteCreate } from "../../types/note";
+import type { Note, NoteCreate } from "../../types/note";
 // import { api } from "@/app/api/api";
 import { nextServer } from "./api";
 
+
+export type CreateNoteInput = Pick<Note, 'title' | 'content' | 'tag'>;
 
 export async function register(email: string, password: string): Promise<User> {
   const { data } = await nextServer.post("/auth/register", { email, password });

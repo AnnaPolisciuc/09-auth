@@ -10,9 +10,17 @@ export type NotesQuery = {
   tag?: string;
 };
 
+
 const cookieHeaders = async () => {
   const cookieStore = await cookies();
-  return { Cookie: cookieStore.toString() };
+
+  const cookieString = Array.from(cookieStore.getAll())
+    .map((c) => `${c.name}=${c.value}`)
+    .join("; ");
+
+  return {
+    Cookie: cookieString,
+  };
 };
 
 export const checkSession = async () => {

@@ -52,7 +52,26 @@ const useAuthStore = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_mo
                 user: null,
                 isAuthenticated: false
             })
-    }));
+    })); // import { create } from 'zustand';
+ // import type { User } from '@/types/user';
+ // //===========================================================================
+ // type AuthStore = {
+ //   isAuthenticated: boolean;
+ //   user: User | null;
+ //   setUser: (user: User) => void;
+ //   clearIsAuthenticated: () => void;
+ // };
+ // //===========================================================================
+ // export const useAuthStore = create<AuthStore>()(set => ({
+ //   isAuthenticated: false,
+ //   user: null,
+ //   setUser: (user: User) => {
+ //     set(() => ({ user, isAuthenticated: true }));
+ //   },
+ //   clearIsAuthenticated: () => {
+ //     set(() => ({ user: null, isAuthenticated: false }));
+ //   },
+ // }));
 }),
 "[externals]/util [external] (util, cjs)", ((__turbopack_context__, module, exports) => {
 
@@ -141,7 +160,6 @@ __turbopack_context__.s([
 ]);
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$axios$2f$lib$2f$axios$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/axios/lib/axios.js [app-ssr] (ecmascript)");
 ;
-//===========================================================================
 const BASE_URL = `${("TURBOPACK compile-time value", "http://localhost:3000")}/api`;
 const nextServer = __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$axios$2f$lib$2f$axios$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"].create({
     baseURL: BASE_URL,

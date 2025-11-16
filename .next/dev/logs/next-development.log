@@ -1,9 +1,59 @@
-[00:00:00.628] Server  WARN     ⚠ The "middleware" file convention is deprecated. Please use "proxy" instead. Learn more: https://nextjs.org/docs/messages/middleware-to-proxy
-[00:00:00.703] Server  LOG      ✓ Ready in 527ms
-[00:00:15.160] Server  LOG     > Error Response Data:
-[00:00:15.160] Server  DIR     {} {}
-[00:00:15.656] Browser ERROR   React instrumentation encountered an error: %o {}
-[00:01:00.294] Server  LOG     > Error Response Data:
-[00:01:00.294] Server  DIR     {} {}
-[00:01:00.452] Server  LOG     > Error Response Data:
-[00:01:00.452] Server  DIR     {} {}
+[00:00:00.819] Server  WARN     ⚠ The "middleware" file convention is deprecated. Please use "proxy" instead. Learn more: https://nextjs.org/docs/messages/middleware-to-proxy
+[00:00:00.904] Server  LOG      ✓ Ready in 714ms
+[00:00:09.679] Server  LOG     Middleware triggered for URL: /sign-in
+[00:00:12.485] Server  LOG     Middleware triggered for URL: /sign-in
+[00:00:13.223] Server  LOG     Middleware triggered for URL: /sign-up
+[00:00:14.141] Server  LOG     Middleware triggered for URL: /notes/filter/all
+[00:00:15.356] Server  LOG     > Error Response Data:
+[00:00:15.358] Server  DIR     {} {}
+[00:00:16.107] Server  LOG     Middleware triggered for URL: /notes/filter/all
+[00:00:16.377] Server  LOG     > Error Response Data:
+[00:00:16.377] Server  DIR     {} {}
+[00:00:19.356] Server  LOG     Middleware triggered for URL: /sign-in
+[00:00:20.123] Server  LOG     Middleware triggered for URL: /sign-up
+[00:03:34.879] Server  LOG      ✓ Compiled in 8ms
+[00:03:47.228] Server  LOG      ✓ Compiled in 2ms
+[00:04:40.466] Server  LOG     Middleware triggered for URL: /sign-in
+[00:05:27.655] Server  LOG      ✓ Compiled in 67ms
+[00:05:33.656] Server  LOG     Middleware triggered for URL: /notes/filter/all
+[00:05:33.691] Server  LOG     Middleware triggered for URL: /api/notes
+[00:05:33.692] Server  LOG     No access token, checking refresh token...
+[00:05:34.383] Server  LOG     > Error Response Data:
+[00:05:34.383] Server  DIR     {} {}
+[00:05:37.629] Browser LOG     http://localhost:3000
+[00:05:37.629] Browser LOG     [2;38;2;124;124;124m%s[0m http://localhost:3000
+[00:05:37.737] Browser LOG     http://localhost:3000
+[00:05:37.737] Browser LOG     [2;38;2;124;124;124m%s[0m http://localhost:3000
+[00:05:37.737] Browser LOG     http://localhost:3000
+[00:05:37.737] Browser LOG     [2;38;2;124;124;124m%s[0m http://localhost:3000
+[00:05:40.661] Server  LOG     Middleware triggered for URL: /api/auth/login
+[00:05:41.523] Server  LOG     Middleware triggered for URL: /profile
+[00:05:41.745] Server  LOG     Middleware triggered for URL: /api/users/me
+[00:05:42.326] Server  ERROR    ⨯ "The requested resource isn't a valid image for" "/avatar.png" "received" null
+[00:05:45.268] Server  LOG     Middleware triggered for URL: /notes/filter/all
+[00:05:45.300] Server  LOG     Middleware triggered for URL: /api/notes
+[00:05:45.301] Server  LOG     No access token, checking refresh token...
+[00:05:45.450] Server  LOG     > Error Response Data:
+[00:05:45.450] Server  DIR     {} {}
+[00:05:45.625] Server  LOG     Middleware triggered for URL: /api/notes
+[00:05:47.041] Server  LOG     Middleware triggered for URL: /api/notes
+[00:05:49.358] Server  LOG     Middleware triggered for URL: /notes/cmi0k1l710ly7yyyn9cwksjnh
+[00:05:49.718] Server  LOG     Middleware triggered for URL: /api/notes/cmi0k1l710ly7yyyn9cwksjnh
+[00:05:49.719] Server  LOG     No access token, checking refresh token...
+[00:05:49.722] Server  ERROR   (node:35230) [DEP0060] DeprecationWarning: The `util._extend` API is deprecated. Please use Object.assign() instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+[00:05:50.208] Server  LOG     Middleware triggered for URL: /api/notes/cmi0k1l710ly7yyyn9cwksjnh
+[00:05:53.039] Server  LOG     Middleware triggered for URL: /notes/action/create
+[00:05:56.400] Server  LOG     Middleware triggered for URL: /api/auth/logout
+[00:05:57.723] Server  LOG     Middleware triggered for URL: /notes/filter/all
+[00:05:57.725] Server  LOG     No access token, checking refresh token...
+[00:05:59.204] Server  LOG     Middleware triggered for URL: /notes/filter/all
+[00:05:59.206] Server  LOG     No access token, checking refresh token...
+[00:06:01.790] Server  LOG     Middleware triggered for URL: /notes/filter/all
+[00:06:01.791] Server  LOG     No access token, checking refresh token...
+[00:06:05.089] Server  LOG     Middleware triggered for URL: /api/auth/login
+[00:06:05.091] Server  LOG     No access token, checking refresh token...
+[00:06:05.684] Server  LOG     Middleware triggered for URL: /profile
+[00:06:05.724] Server  LOG     Middleware triggered for URL: /api/users/me
+[00:06:06.090] Server  ERROR    ⨯ "The requested resource isn't a valid image for" "/avatar.png" "received" null
+[00:06:35.850] Server  LOG      ✓ Compiled in 3ms

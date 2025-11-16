@@ -28,7 +28,26 @@ const useNoteStore = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_mo
             })
     }), {
     name: "note-draft"
-}));
+})); // import { create } from 'zustand';
+ // import type { User } from '@/types/user';
+ // //===========================================================================
+ // type AuthStore = {
+ //   isAuthenticated: boolean;
+ //   user: User | null;
+ //   setUser: (user: User) => void;
+ //   clearIsAuthenticated: () => void;
+ // };
+ // //===========================================================================
+ // export const useAuthStore = create<AuthStore>()(set => ({
+ //   isAuthenticated: false,
+ //   user: null,
+ //   setUser: (user: User) => {
+ //     set(() => ({ user, isAuthenticated: true }));
+ //   },
+ //   clearIsAuthenticated: () => {
+ //     set(() => ({ user: null, isAuthenticated: false }));
+ //   },
+ // }));
 }),
 "[project]/components/NoteForm/NoteForm.module.css [app-ssr] (css module)", ((__turbopack_context__) => {
 

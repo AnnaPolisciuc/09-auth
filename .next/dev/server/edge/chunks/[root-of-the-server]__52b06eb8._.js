@@ -20,7 +20,6 @@ __turbopack_context__.s([
 ]);
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$axios$2f$lib$2f$axios$2e$js__$5b$middleware$2d$edge$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/axios/lib/axios.js [middleware-edge] (ecmascript)");
 ;
-//===========================================================================
 const BASE_URL = `${("TURBOPACK compile-time value", "http://localhost:3000")}/api`;
 const nextServer = __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$axios$2f$lib$2f$axios$2e$js__$5b$middleware$2d$edge$5d$__$28$ecmascript$29$__["default"].create({
     baseURL: BASE_URL,
@@ -47,8 +46,9 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$api$2f$api$2e$ts__$5b
 ;
 const cookieHeaders = async ()=>{
     const cookieStore = await (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$esm$2f$server$2f$request$2f$cookies$2e$js__$5b$middleware$2d$edge$5d$__$28$ecmascript$29$__["cookies"])();
+    const cookieString = Array.from(cookieStore.getAll()).map((c)=>`${c.name}=${c.value}`).join("; ");
     return {
-        Cookie: cookieStore.toString()
+        Cookie: cookieString
     };
 };
 const checkSession = async ()=>{
@@ -109,6 +109,7 @@ const publicRoutes = [
     '/sign-up'
 ];
 async function middleware(request) {
+    console.log('Middleware triggered for URL:', request.nextUrl.pathname);
     const { pathname } = request.nextUrl;
     const cookieStore = await (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$esm$2f$server$2f$request$2f$cookies$2e$js__$5b$middleware$2d$edge$5d$__$28$ecmascript$29$__["cookies"])();
     const accessToken = cookieStore.get('accessToken')?.value;
@@ -116,6 +117,7 @@ async function middleware(request) {
     const isPublicRoute = publicRoutes.some((route)=>pathname.startsWith(route));
     const isPrivateRoute = privateRoutes.some((route)=>pathname.startsWith(route));
     if (!accessToken) {
+        console.log('No access token, checking refresh token...');
         if (refreshToken) {
             const data = await (0, __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$api$2f$serverApi$2e$ts__$5b$middleware$2d$edge$5d$__$28$ecmascript$29$__["checkSession"])();
             const setCookie = data.headers['set-cookie'];
