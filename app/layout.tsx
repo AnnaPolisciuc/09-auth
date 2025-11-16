@@ -4,6 +4,7 @@ import Footer from "@/components/Footer/Footer";
 import TanStackProvider from "@/components/TanStackProvider/TanStackProvider";
 import { Metadata } from 'next';
 import { Roboto } from 'next/font/google';
+import { AuthProvider } from "@/components/AuthProvider/AuthProvider";
 
 
 export const metadata: Metadata = {
@@ -43,12 +44,14 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={roboto.variable}>
-        <TanStackProvider>
-          <Header />
-          {children}
-          {modal}
-          <Footer />
-        </TanStackProvider>
+      <AuthProvider>
+          <TanStackProvider>
+            <Header />
+            {children}
+            {modal}
+            <Footer />
+          </TanStackProvider>
+        </AuthProvider>
       </body>
     </html>
   );
