@@ -65,7 +65,7 @@ const getMe = async ()=>{
     });
     return data;
 };
-const fetchNotes = async (params = {})=>{
+const fetchNotes = async (p0, p1, p2, tag, params = {})=>{
     const headers = await cookieHeaders();
     const { data } = await __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$api$2f$api$2e$ts__$5b$middleware$2d$edge$5d$__$28$ecmascript$29$__["nextServer"].get('/notes', {
         headers,
@@ -109,7 +109,6 @@ const publicRoutes = [
     '/sign-up'
 ];
 async function middleware(request) {
-    console.log('Middleware triggered for URL:', request.nextUrl.pathname);
     const { pathname } = request.nextUrl;
     const cookieStore = await (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$esm$2f$server$2f$request$2f$cookies$2e$js__$5b$middleware$2d$edge$5d$__$28$ecmascript$29$__["cookies"])();
     const accessToken = cookieStore.get('accessToken')?.value;
@@ -117,7 +116,6 @@ async function middleware(request) {
     const isPublicRoute = publicRoutes.some((route)=>pathname.startsWith(route));
     const isPrivateRoute = privateRoutes.some((route)=>pathname.startsWith(route));
     if (!accessToken) {
-        console.log('No access token, checking refresh token...');
         if (refreshToken) {
             const data = await (0, __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$api$2f$serverApi$2e$ts__$5b$middleware$2d$edge$5d$__$28$ecmascript$29$__["checkSession"])();
             const setCookie = data.headers['set-cookie'];
@@ -158,13 +156,14 @@ async function middleware(request) {
             return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$esm$2f$server$2f$web$2f$exports$2f$index$2e$js__$5b$middleware$2d$edge$5d$__$28$ecmascript$29$__["NextResponse"].redirect(new URL('/sign-in', request.url));
         }
     }
-    if (isPublicRoute) {
-        return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$esm$2f$server$2f$web$2f$exports$2f$index$2e$js__$5b$middleware$2d$edge$5d$__$28$ecmascript$29$__["NextResponse"].redirect(new URL('/', request.url));
+    if (accessToken) {
+        if (isPublicRoute) {
+            return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$esm$2f$server$2f$web$2f$exports$2f$index$2e$js__$5b$middleware$2d$edge$5d$__$28$ecmascript$29$__["NextResponse"].redirect(new URL('/', request.url));
+        }
+        if (isPrivateRoute) {
+            return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$esm$2f$server$2f$web$2f$exports$2f$index$2e$js__$5b$middleware$2d$edge$5d$__$28$ecmascript$29$__["NextResponse"].next();
+        }
     }
-    if (isPrivateRoute) {
-        return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$esm$2f$server$2f$web$2f$exports$2f$index$2e$js__$5b$middleware$2d$edge$5d$__$28$ecmascript$29$__["NextResponse"].next();
-    }
-    return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$esm$2f$server$2f$web$2f$exports$2f$index$2e$js__$5b$middleware$2d$edge$5d$__$28$ecmascript$29$__["NextResponse"].next();
 }
 const config = {
     matcher: [

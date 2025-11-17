@@ -2,6 +2,9 @@ import { NextRequest, NextResponse } from 'next/server';
 import { api } from '../../api';
 import { cookies } from 'next/headers';
 import { parse } from 'cookie';
+import { isAxiosError } from 'axios';
+import { logErrorResponse } from '../../_utils/utils';
+
 
 export async function POST(req: NextRequest) {
   try {
@@ -13,31 +16,37 @@ export async function POST(req: NextRequest) {
 
     if (setCookie) {
       const cookieArray = Array.isArray(setCookie) ? setCookie : [setCookie];
+
       for (const cookieStr of cookieArray) {
         const parsed = parse(cookieStr);
         const options = {
           expires: parsed.Expires ? new Date(parsed.Expires) : undefined,
           path: parsed.Path,
-          maxAge: Number(parsed['Max-Age']),
+          maxAge: parsed['Max-Age'] ? Number(parsed['Max-Age']) : undefined,
         };
-        if (parsed.accessToken) cookieStore.set('accessToken', parsed.accessToken, options);
-        if (parsed.refreshToken) cookieStore.set('refreshToken', parsed.refreshToken, options);
+
+        if (parsed.accessToken)
+          cookieStore.set('accessToken', parsed.accessToken, options);
+
+        if (parsed.refreshToken)
+          cookieStore.set('refreshToken', parsed.refreshToken, options);
       }
-
-      return NextResponse.json(apiRes.data, { status: apiRes.status });
     }
 
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    return NextResponse.json(apiRes.data, { status: apiRes.status });
   } catch (error: unknown) {
-    if (error instanceof Error) {
-      return NextResponse.json(
-        { error: error.message },
-        { status: 500 }
-      );
+
+    logErrorResponse(error);
+
+    if (isAxiosError(error)) {
+      const status = error.response?.status ?? 500;
+      const data = error.response?.data ?? { message: error.message };
+
+      return NextResponse.json(data, { status });
     }
-  
+
     return NextResponse.json(
-      { error: 'Internal Server Error' },
+      { message: 'Internal Server Error' },
       { status: 500 }
     );
   }

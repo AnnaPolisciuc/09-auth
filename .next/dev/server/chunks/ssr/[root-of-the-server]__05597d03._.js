@@ -169,9 +169,9 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$api$2f$serverApi$2e$t
 ;
 const metadata = {
     title: 'My profile - NoteHub',
-    description: "Sorry, the page you're looking for doesn’t exist. Go back to the NoteHub homepage.",
+    description: "NoteHub is a simple and efficient application designed for managing personal notes.",
     openGraph: {
-        title: 'Page Not Found — NoteHub',
+        title: 'My profile — NoteHub',
         description: "NoteHub is a simple and efficient application designed for managing personal notes.",
         url: "https://9-auth-beige.vercel.app/not-found",
         images: [

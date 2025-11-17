@@ -3,9 +3,8 @@
 import { useAuthStore } from "@/lib/store/authStore";
 import css from "./EditProfilePage.module.css";
 import { useRouter } from "next/navigation";
-import { useState, useEffect } from "react";
-import { updateMe, uploadImage } from "@/lib/api/clientApi";
-import Image from "next/image";
+import { useState } from "react";
+import { updateMe } from "@/lib/api/clientApi";
 
 export default function EditProfile() {
   const router = useRouter();
@@ -13,46 +12,10 @@ export default function EditProfile() {
   const setUser = useAuthStore((state) => state.setUser);
 
   const [username, setUsername] = useState(user?.username || "");
-  const [photoUrl, setPhotoUrl] = useState<string | null>(user?.avatar || null);
-  const [imageFile, setImageFile] = useState<File | null>(null);
-  const [preview, setPreview] = useState<string | null>(user?.avatar || null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   if (!user) return <p>Loading...</p>;
-
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-
-    if (!file.type.startsWith("image/")) {
-      setError("Only images are allowed");
-      return;
-    }
-
-    const MAX_SIZE = 2 * 1024 * 1024;
-    if (file.size > MAX_SIZE) {
-  setError("Max file size 2MB");
-  return;
-}
-
-    setError(null);
-    setImageFile(file);
-    setPreview(URL.createObjectURL(file));
-  };
-
-  const handleRemoveImage = () => {
-    setImageFile(null);
-    setPreview(null);
-    setPhotoUrl(null);
-  };
-
-  // eslint-disable-next-line react-hooks/rules-of-hooks
-  useEffect(() => {
-    return () => {
-      if (preview) URL.revokeObjectURL(preview);
-    };
-  }, [preview]);
 
   const handleSave = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -60,17 +23,7 @@ export default function EditProfile() {
     setError(null);
 
     try {
-      let newPhotoUrl: string | null = photoUrl;
-
-      if (imageFile) {
-        newPhotoUrl = await uploadImage(imageFile);
-      }
-
-      const updatedUser = await updateMe({
-        username,
-        avatar: newPhotoUrl ?? undefined,
-      });
-
+      const updatedUser = await updateMe({ username });
       setUser(updatedUser);
       router.push("/profile");
     } catch (err) {
@@ -87,36 +40,6 @@ export default function EditProfile() {
     <main className={css.mainContent}>
       <div className={css.profileCard}>
         <h1 className={css.formTitle}>Edit Profile</h1>
-
-        <div className={css.avatarWrapper}>
-          {preview ? (
-            <Image
-              src={preview}
-              alt="User Avatar"
-              width={120}
-              height={120}
-              className={css.avatar}
-            />
-          ) : (
-            <div className={css.avatarPlaceholder}>No Avatar</div>
-          )}
-
-          <label className={css.uploadLabel}>
-            <span>{preview ? "Change photo" : "Upload photo"}</span>
-            <input
-              type="file"
-              accept="image/*"
-              onChange={handleImageChange}
-              className={css.uploadInput}
-            />
-          </label>
-
-          {preview && (
-            <button type="button" className={css.removeButton} onClick={handleRemoveImage}>
-              Remove
-            </button>
-          )}
-        </div>
 
         <form className={css.profileInfo} onSubmit={handleSave}>
           <div className={css.usernameWrapper}>

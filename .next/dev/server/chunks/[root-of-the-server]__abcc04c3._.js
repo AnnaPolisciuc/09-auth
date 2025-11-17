@@ -186,40 +186,28 @@ async function POST(req) {
                 const options = {
                     expires: parsed.Expires ? new Date(parsed.Expires) : undefined,
                     path: parsed.Path,
-                    maxAge: Number(parsed['Max-Age'])
+                    maxAge: parsed['Max-Age'] ? Number(parsed['Max-Age']) : undefined
                 };
                 if (parsed.accessToken) cookieStore.set('accessToken', parsed.accessToken, options);
                 if (parsed.refreshToken) cookieStore.set('refreshToken', parsed.refreshToken, options);
             }
-            return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].json(apiRes.data, {
-                status: apiRes.status
-            });
         }
-        return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].json({
-            error: 'Unauthorized'
-        }, {
-            status: 401
+        return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].json(apiRes.data, {
+            status: apiRes.status
         });
     } catch (error) {
+        (0, __TURBOPACK__imported__module__$5b$project$5d2f$app$2f$api$2f$_utils$2f$utils$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["logErrorResponse"])(error);
         if ((0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$axios$2f$index$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__$3c$locals$3e$__["isAxiosError"])(error)) {
-            (0, __TURBOPACK__imported__module__$5b$project$5d2f$app$2f$api$2f$_utils$2f$utils$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["logErrorResponse"])(error.response?.data);
-            return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].json({
-                error: error.message,
-                response: error.response?.data
-            }, {
-                status: error.response?.status ?? 500
-            });
-        } else if (error instanceof Error) {
-            (0, __TURBOPACK__imported__module__$5b$project$5d2f$app$2f$api$2f$_utils$2f$utils$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["logErrorResponse"])({
+            const status = error.response?.status ?? 500;
+            const data = error.response?.data ?? {
                 message: error.message
-            });
-        } else {
-            (0, __TURBOPACK__imported__module__$5b$project$5d2f$app$2f$api$2f$_utils$2f$utils$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["logErrorResponse"])({
-                message: 'Unknown error'
+            };
+            return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].json(data, {
+                status
             });
         }
         return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].json({
-            error: 'Internal Server Error'
+            message: 'Internal Server Error'
         }, {
             status: 500
         });
