@@ -5,6 +5,7 @@ import css from "./EditProfilePage.module.css";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { updateMe } from "@/lib/api/clientApi";
+import Image from "next/image";
 
 export default function EditProfile() {
   const router = useRouter();
@@ -40,6 +41,15 @@ export default function EditProfile() {
     <main className={css.mainContent}>
       <div className={css.profileCard}>
         <h1 className={css.formTitle}>Edit Profile</h1>
+        <div className={css.avatarWrapper}>
+          <Image
+            src={user.avatar}
+            alt="User avatar"
+            width={120}
+            height={120}
+            className={css.avatar}
+          />
+        </div>
 
         <form className={css.profileInfo} onSubmit={handleSave}>
           <div className={css.usernameWrapper}>
@@ -63,7 +73,11 @@ export default function EditProfile() {
               {loading ? "Saving..." : "Save"}
             </button>
 
-            <button type="button" className={css.cancelButton} onClick={handleCancel}>
+            <button
+              type="button"
+              className={css.cancelButton}
+              onClick={handleCancel}
+            >
               Cancel
             </button>
           </div>
