@@ -30,3 +30,5 @@ Learn more: https://nextjs.org/docs/messages/middleware-to-proxy
 [00:05:33.359] Server  LOG      ✓ Compiled in 98ms
 [00:06:16.376] Server  LOG      ✓ Compiled in 8ms
 [09:00:49.264] Server  LOG      ✓ Compiled in 44ms
+[27:58:22.917] Server  LOG        Reload env: .env
+[27:58:22.989] Server  LOG      ✓ Compiled in 35ms

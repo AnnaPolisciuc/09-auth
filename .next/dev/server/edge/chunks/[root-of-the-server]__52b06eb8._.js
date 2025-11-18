@@ -20,7 +20,7 @@ __turbopack_context__.s([
 ]);
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$axios$2f$lib$2f$axios$2e$js__$5b$middleware$2d$edge$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/axios/lib/axios.js [middleware-edge] (ecmascript)");
 ;
-const BASE_URL = `${("TURBOPACK compile-time value", "http://localhost:3000")}/api`;
+const BASE_URL = `${("TURBOPACK compile-time value", "https://09-auth-227peusg1-annas-projects-7f4c70b0.vercel.app")}/api`;
 const nextServer = __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$axios$2f$lib$2f$axios$2e$js__$5b$middleware$2d$edge$5d$__$28$ecmascript$29$__["default"].create({
     baseURL: BASE_URL,
     withCredentials: true
